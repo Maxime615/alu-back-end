@@ -1,39 +1,37 @@
 #!/usr/bin/python3
 """
 A script that uses a REST API (JSONPlaceholder) for a given employee ID,
-returns information about his/her TODO list progress, and displays it
-on the standard output.
+returns and displays his/her TODO list progress.
 """
 
-from sys import argv
 import requests
+import sys
 
 
 if __name__ == "__main__":
-    if len(argv) < 2:
-        exit(1)
+    if len(sys.argv) < 2:
+        sys.exit(1)
 
-    try:
-        employee_id = int(argv[1])
-    except ValueError:
-        exit(1)
-
+    employee_id = sys.argv[1]
     base_url = "https://jsonplaceholder.typicode.com"
 
     # Fetch user details
-    user_res = requests.get("{}/users/{}".format(base_url, employee_id))
-    user_data = user_res.json()
-    employee_name = user_data.get("name")
+    user_url = "{}/users/{}".format(base_url, employee_id)
+    user_name = requests.get(user_url).json().get("name")
 
-    # Fetch todos for the user
-    todos_res = requests.get("{}/todos".format(base_url), params={"userId": employee_id})
-    todos_data = todos_res.json()
+    # Fetch todos
+    todos_url = "{}/todos".format(base_url)
+    todos = requests.get(todos_url, params={"userId": employee_id}).json()
 
-    total_tasks = len(todos_data)
-    completed_tasks = [t for t in todos_data if t.get("completed") is True]
-    number_of_done_tasks = len(completed_tasks)
+    total_tasks = len(todos)
+    done_tasks = [t for t in todos if t.get("completed") is True]
+    number_of_done_tasks = len(done_tasks)
 
-    # Display progress
-    print("Employee {} is done with tasks({}/{}):".format(
-        employee_name, number_of_done_tasks, total_tasks))
+    print(
+        "Employee {} is done with tasks({}/{}):".format(
+            user_name, number_of_done_tasks, total_tasks
+        )
+    )
 
+    for task in done_tasks:
+        print("\t {}".format(task.get("title")))
