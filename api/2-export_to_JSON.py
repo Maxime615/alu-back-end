@@ -26,7 +26,11 @@ if __name__ == "__main__":
     username = user_data.get("username")
 
     # Fetch todos for the user
-    todos_res = requests.get("{}/todos".format(base_url), params={"userId": employee_id})
+    todos_url = "{}/todos".format(base_url)
+    todos_res = requests.get(
+        todos_url,
+        params={"userId": employee_id}
+    )
     todos_data = todos_res.json()
 
     # Build the task list matching the required structure
@@ -39,12 +43,7 @@ if __name__ == "__main__":
         }
         task_list.append(task_dict)
 
-    # Wrap in dictionary with employee_id as key
-    out_data = {str(employee_id): task_list}
-
-    # File name format: USER_ID.json
+    # Export to JSON file named USER_ID.json
     file_name = "{}.json".format(employee_id)
-
-    # Write data to JSON file
     with open(file_name, mode="w", encoding="utf-8") as json_file:
-        json.dump(out_data, json_file)
+        json.dump({str(employee_id): task_list}, json_file)
