@@ -27,7 +27,10 @@ if __name__ == "__main__":
         username = user.get("username")
 
         # Filter todos for the current user
-        user_todos = [t for t in todos_data if t.get("userId") == user_id]
+        user_todos = [
+            t for t in todos_data
+            if t.get("userId") == user_id
+        ]
 
         task_list = []
         for task in user_todos:
@@ -41,5 +44,5 @@ if __name__ == "__main__":
         all_employees_dict[str(user_id)] = task_list
 
     # Export to JSON file named todo_all_employees.json
-    with open("todo_all_employees.json", mode="w", encoding="utf-8") as json_file:
-        json.dump(all_employees_dict, json_file)
+    with open("todo_all_employees.json", mode="w", encoding="utf-8") as f:
+        json.dump(all_employees_dict, f)
