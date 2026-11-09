@@ -1,4 +1,4 @@
-#!/usr/init/python3
+#!/usr/bin/python3
 """
 A script that uses a REST API (JSONPlaceholder) for a given employee ID,
 returns and displays his/her TODO list progress.
