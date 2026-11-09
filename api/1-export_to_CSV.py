@@ -26,7 +26,8 @@ if __name__ == "__main__":
     username = user_data.get("username")
 
     # Fetch todos for the user
-    todos_res = requests.get("{}/todos".format(base_url), params={"userId": employee_id})
+    todos_url = "{}/todos".format(base_url)
+    todos_res = requests.get(todos_url, params={"userId": employee_id})
     todos_data = todos_res.json()
 
     # File name format: USER_ID.csv
